@@ -44,10 +44,10 @@ export const login = async (req, res) => {
         account: req.user.account,
         role: req.user.role,
         // ★欠post collection calendar
-        post: req.user.post,
-        reply: req.user.reply,
-        myPost: req.user.myPost,
-        postCollection: req.user.postCollection,
+        // post: req.user.post,
+        // reply: req.user.reply,
+        // myPost: req.user.myPost,
+        // postCollection: req.user.postCollection,
       },
     })
   } catch (error) {

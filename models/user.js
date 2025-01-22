@@ -4,34 +4,27 @@ import bcrypt from 'bcrypt'
 import UserRole from '../enums/UserRole.js'
 
 const postSchema = new Schema({
-  title: {
-    type: String,
-    required: [true, '文章標題必填'],
-    minlength: [5, '標題過短'],
-    maxlength: [100, '標題過長'],
+  user: {
+    type: ObjectId,
+    ref: 'user', // 與用戶的關聯
+    required: true,
   },
   content: {
     type: String,
     required: [true, '文章內容必填'],
   },
-  author: {
-    type: ObjectId,
-    ref: 'user', // 與用戶的關聯
+  color: {
+    type: String,
     required: true,
   },
   tags: {
     type: [String], // 可選的標籤
-    default: [],
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
   },
 })
 
-const collectionSchema = new Schema({
+const FavoritesSchema = new Schema({
   user: {
-    type: Schema.Types.ObjectId,
+    type: ObjectId,
     ref: 'user', // 與用戶的關聯
     required: true,
   },
@@ -47,6 +40,33 @@ const collectionSchema = new Schema({
       },
     },
   ],
+})
+
+const calendarSchema = new Schema({
+  title: {
+    type: String,
+    required: [true, '活動標題必填'],
+  },
+  description: {
+    type: String,
+    required: [true, '活動敘述必填'],
+  },
+  date: {
+    type: Date,
+    required: [true, '活動日期必填'],
+  },
+  location: {
+    type: String,
+  },
+  // 日期是否每年固定
+  fixed: {
+    type: Boolean,
+    default: false,
+  },
+  participants: {
+    type: ObjectId,
+    ref: 'user',
+  },
 })
 
 const schema = new Schema(
@@ -95,10 +115,12 @@ const schema = new Schema(
     icon: {
       type: String,
     },
+    // 是否可以發文
     post: {
       type: Boolean,
       default: true,
     },
+    // 是否可以回覆
     reply: {
       type: Boolean,
       default: true,
@@ -106,10 +128,12 @@ const schema = new Schema(
     myPost: {
       type: [postSchema],
     },
-    postCollection: {
-      type: [collectionSchema],
+    postFavorites: {
+      type: [FavoritesSchema],
     },
-    // ★還要有個人行事曆
+    calendar: {
+      type: [calendarSchema],
+    },
   },
   {
     versionKey: false,

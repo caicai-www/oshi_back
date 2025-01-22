@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import { StatusCodes } from 'http-status-codes'
 import routerUser from './routers/user.js'
 import './passport.js'
+import cors from 'cors'
 
 mongoose
   .connect(process.env.DB_URL)
@@ -16,6 +17,24 @@ mongoose
   })
 
 const app = express()
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      // console.log(origin)
+      if (
+        origin === undefined ||
+        origin.includes('localhost') ||
+        origin.includes('127.0.0.1') ||
+        origin.includes('github.io')
+      ) {
+        callback(null, true)
+      } else {
+        callback(new Error('CORS'), false)
+      }
+    },
+  }),
+)
 
 app.use(express.json())
 app.use((error, req, res, next) => {
