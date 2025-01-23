@@ -73,3 +73,41 @@ export const profile = async (req, res) => {
     },
   })
 }
+
+export const refresh = async (req, res) => {
+  try {
+    const idx = req.user.tokens.findIndex((token) => token === req.token)
+    const token = jwt.sign({ _id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '7 days' })
+    req.user.tokens[idx] = token
+    await req.user.save()
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: '',
+      result: token,
+    })
+  } catch (error) {
+    console.log('controller.user.refresh:', error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: '伺服器錯誤',
+    })
+  }
+}
+
+export const logout = async (req, res) => {
+  try {
+    const idx = req.user.tokens.findIndex((token) => token === req.token)
+    req.user.tokens.splice(idx, 1)
+    await req.user.save()
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: '',
+    })
+  } catch (error) {
+    console.log('controller.user.logout:', error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: '伺服器錯誤',
+    })
+  }
+}

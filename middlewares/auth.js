@@ -1,6 +1,7 @@
 import passport from 'passport'
 import { StatusCodes } from 'http-status-codes'
 import JsonWebToken from 'jsonwebtoken'
+import UserRole from '../enums/UserRole.js'
 
 export const login = (req, res, next) => {
   passport.authenticate('login', { session: false }, (error, user, info) => {
@@ -20,6 +21,8 @@ export const login = (req, res, next) => {
         })
       }
     }
+    req.user = user
+    next()
   })(req, res, next)
 }
 
@@ -47,4 +50,15 @@ export const jwt = (req, res, next) => {
     req.token = data.token
     next()
   })(req, res, next)
+}
+
+export const admin = (req, res, next) => {
+  if (req.user.role !== UserRole.ADMIN) {
+    res.status(StatusCodes.OK).json({
+      success: false,
+      message: '使用者權限不足',
+    })
+  } else {
+    next()
+  }
 }

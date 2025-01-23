@@ -41,10 +41,19 @@ passport.use(
       jwtFromRequest: passportJWT.ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: process.env.JWT_SECRET,
       passReqToCallback: true,
+      // 允許過期的jwt通過
+      ignoreExpiration: true,
     },
     async (req, payload, done) => {
       try {
         const token = passportJWT.ExtractJwt.fromAuthHeaderAsBearerToken()(req)
+
+        const expired = payload.exp * 1000 < new Date().getTime()
+        const url = req.baseUrl + req.path
+        if (expired && url !== '/user/refresh' && url !== '/user/logout') {
+          throw new Error('EXPIRED')
+        }
+
         const user = await User.findById(payload._id).orFail(new Error('USER'))
         if (!user.tokens.includes(token)) {
           throw new Error('TOKEN')
@@ -56,6 +65,8 @@ passport.use(
           return done(null, null, { message: '查無使用者' })
         } else if (error.message === 'TOKEN') {
           return done(null, null, { message: '使用者驗證錯誤' })
+        } else if (error.message === 'EXPIRED') {
+          return done(null, null, { message: '登入過期' })
         } else {
           return done(null, null, { message: '伺服器錯誤' })
         }

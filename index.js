@@ -3,6 +3,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import { StatusCodes } from 'http-status-codes'
 import routerUser from './routers/user.js'
+import routerPost from './routers/post.js'
 import './passport.js'
 import cors from 'cors'
 
@@ -45,6 +46,7 @@ app.use((error, req, res, next) => {
 })
 
 app.use('/user', routerUser)
+app.use('/post', routerPost)
 
 app.listen(process.env.PORT || 4000, () => {
   console.log('伺服器啟動')
