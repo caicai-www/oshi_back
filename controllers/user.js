@@ -58,6 +58,22 @@ export const login = async (req, res) => {
     })
   }
 }
+export const get = async (req, res) => {
+  try {
+    const result = await User.find()
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: '',
+      result,
+    })
+  } catch (error) {
+    console.log('controllers.user.get:', error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: '伺服器錯誤',
+    })
+  }
+}
 
 export const profile = async (req, res) => {
   res.status(StatusCodes.OK).json({
