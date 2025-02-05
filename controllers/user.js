@@ -131,9 +131,9 @@ export const logout = async (req, res) => {
 
 export const edit = async (req, res) => {
   try {
+    // console.log(req.body)
     if (!validator.isMongoId(req.params.id)) throw new Error('ID')
-    console.log(req.body)
-    const result = await User.findByIdAndUpdate(req.params.id, req.body, {
+      const result = await User.findByIdAndUpdate(req.params.id, req.body, {
       runValidators: true,
       new: true,
     }).orFail(new Error('NOT FOUND'))
