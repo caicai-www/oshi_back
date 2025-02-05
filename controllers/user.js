@@ -1,6 +1,7 @@
 import User from '../models/user.js'
 import { StatusCodes } from 'http-status-codes'
 import jwt from 'jsonwebtoken'
+import validator from 'validator'
 
 export const create = async (req, res) => {
   try {
@@ -125,5 +126,45 @@ export const logout = async (req, res) => {
       success: false,
       message: '伺服器錯誤',
     })
+  }
+}
+
+export const edit = async (req, res) => {
+  try {
+    if (!validator.isMongoId(req.params.id)) throw new Error('ID')
+    console.log(req.body)
+    const result = await User.findByIdAndUpdate(req.params.id, req.body, {
+      runValidators: true,
+      new: true,
+    }).orFail(new Error('NOT FOUND'))
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: '',
+      result,
+    })
+  } catch (error) {
+    console.log('user.edit', error)
+    if (error.name === 'CastError' || error.message === 'ID') {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: '用戶無效',
+      })
+    } else if (error.message === 'NOT FOUND') {
+      res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: '查無用戶',
+      })
+    } else if (error.name === 'ValidationError') {
+      const key = Object.keys(error.errors)[0]
+      res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: error.errors[key].message,
+      })
+    } else {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: '伺服器錯誤',
+      })
+    }
   }
 }
