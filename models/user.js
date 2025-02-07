@@ -111,6 +111,7 @@ const schema = new Schema(
     },
     birthdate: {
       type: Date,
+      default: '2000-01-01',
     },
     icon: {
       type: String,

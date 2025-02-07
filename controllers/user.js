@@ -83,10 +83,7 @@ export const profile = async (req, res) => {
     result: {
       account: req.user.account,
       role: req.user.role,
-      post: req.user.post,
-      reply: req.user.reply,
-      myPost: req.user.myPost,
-      postCollection: req.user.postCollection,
+      id: req.user.id,
     },
   })
 }
@@ -129,11 +126,43 @@ export const logout = async (req, res) => {
   }
 }
 
+export const getId = async (req, res) => {
+  try {
+    // console.log('Request User ID:', req.user?.id)
+    if (!validator.isMongoId(req.params.id)) throw new Error('ID')
+    const result = await User.findById(req.params.id).orFail(new Error('NOT FOUND'))
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: '',
+      result,
+    })
+  } catch (error) {
+    console.log('controller user getID', error)
+    if (error.name === 'CastError' || error.message === 'ID') {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: '用戶無效',
+      })
+    } else if (error.message === 'NOT FOUND') {
+      res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: '查無用戶',
+      })
+    } else {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: '伺服器錯誤',
+      })
+    }
+  }
+}
+
 export const edit = async (req, res) => {
   try {
-    // console.log(req.body)
     if (!validator.isMongoId(req.params.id)) throw new Error('ID')
-      const result = await User.findByIdAndUpdate(req.params.id, req.body, {
+    req.body.icon = req.file?.path
+    // console.log(req.body.icon)
+    const result = await User.findByIdAndUpdate(req.params.id, req.body, {
       runValidators: true,
       new: true,
     }).orFail(new Error('NOT FOUND'))

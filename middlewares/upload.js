@@ -25,7 +25,7 @@ const upload = multer({
 })
 
 export default (req, res, next) => {
-  upload.single('image')(req, res, (error) => {
+  upload.single('icon')(req, res, (error) => {
     if (error) {
       console.log('middlewares.upload', error)
       res.status(StatusCodes.BAD_REQUEST).json({
