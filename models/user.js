@@ -3,25 +3,6 @@ import validator from 'validator'
 import bcrypt from 'bcrypt'
 import UserRole from '../enums/UserRole.js'
 
-const postSchema = new Schema({
-  user: {
-    type: ObjectId,
-    ref: 'user', // 與用戶的關聯
-    required: true,
-  },
-  content: {
-    type: String,
-    required: [true, '文章內容必填'],
-  },
-  color: {
-    type: String,
-    required: true,
-  },
-  tags: {
-    type: [String], // 可選的標籤
-  },
-})
-
 const FavoritesSchema = new Schema({
   user: {
     type: ObjectId,
@@ -125,9 +106,6 @@ const schema = new Schema(
     reply: {
       type: Boolean,
       default: true,
-    },
-    myPost: {
-      type: [postSchema],
     },
     postFavorites: {
       type: [FavoritesSchema],

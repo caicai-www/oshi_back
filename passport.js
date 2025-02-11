@@ -47,7 +47,7 @@ passport.use(
     async (req, payload, done) => {
       try {
         const token = passportJWT.ExtractJwt.fromAuthHeaderAsBearerToken()(req)
-
+        // console.log('🚀 Passport Token:', token) // 檢查 Token
         const expired = payload.exp * 1000 < new Date().getTime()
         const url = req.baseUrl + req.path
         if (expired && url !== '/user/refresh' && url !== '/user/logout') {

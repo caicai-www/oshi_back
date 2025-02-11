@@ -24,7 +24,7 @@ const schema = new Schema(
     },
     colors: {
       type: String,
-      required: [true, '內容必填'],
+      required: [true, '顏色必填'],
       enum: {
         values: ['red', 'pink', 'orange', 'blue', 'green', 'yellow', 'purple', 'white', 'black'],
         message: '顏色分類不存在',

@@ -12,7 +12,7 @@ cloudinary.config({
 const upload = multer({
   storage: new CloudinaryStorage({ cloudinary }),
   fileFilter(req, file, callback) {
-    console.log(file)
+    // console.log(file)
     if (['image/jpeg', 'image/png'].includes(file.mimetype)) {
       callback(null, true)
     } else {
@@ -25,7 +25,7 @@ const upload = multer({
 })
 
 export default (req, res, next) => {
-  upload.single('icon')(req, res, (error) => {
+  upload.single('image')(req, res, (error) => {
     if (error) {
       console.log('middlewares.upload', error)
       res.status(StatusCodes.BAD_REQUEST).json({

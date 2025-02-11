@@ -34,7 +34,7 @@ export const jwt = (req, res, next) => {
           success: false,
           messgae: '使用者驗證錯誤',
         })
-      } else if (info.message === 'severError') {
+      } else if (info.message === 'serverError') {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
           success: false,
           message: info.message,

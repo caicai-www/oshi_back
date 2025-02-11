@@ -7,7 +7,8 @@ const router = Router()
 
 router.post('/', auth.jwt, upload, post.create)
 // 未登入也可以看到的
-router.get('/', post.get)
+router.get('/', auth.jwt, post.get)
+router.get('/all', post.getAll)
 // 單個商品
 router.get('/:id', post.getId)
 
