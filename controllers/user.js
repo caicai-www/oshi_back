@@ -121,42 +121,54 @@ export const logout = async (req, res) => {
   }
 }
 
-export const getId = async (req, res) => {
-  try {
-    // console.log('Request User ID:', req.user?.id)
-    if (!validator.isMongoId(req.params.id)) throw new Error('ID')
-    const result = await User.findById(req.params.id).orFail(new Error('NOT FOUND'))
-    res.status(StatusCodes.OK).json({
-      success: true,
-      message: '',
-      result,
-    })
-  } catch (error) {
-    console.log('controller user getID', error)
-    if (error.name === 'CastError' || error.message === 'ID') {
-      res.status(StatusCodes.BAD_REQUEST).json({
-        success: false,
-        message: '用戶無效',
-      })
-    } else if (error.message === 'NOT FOUND') {
-      res.status(StatusCodes.NOT_FOUND).json({
-        success: false,
-        message: '查無用戶',
-      })
-    } else {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: '伺服器錯誤',
-      })
-    }
-  }
+// export const getIdInfo = async (req, res) => {
+//   try {
+//     // console.log('Request User ID:', req.user?.id)
+//     if (!validator.isMongoId(req.params.id)) throw new Error('ID')
+//     const result = await User.findById(req.params.id).orFail(new Error('NOT FOUND'))
+//     res.status(StatusCodes.OK).json({
+//       success: true,
+//       message: '',
+//       result,
+//     })
+//   } catch (error) {
+//     console.log('controller user getID', error)
+//     if (error.name === 'CastError' || error.message === 'ID') {
+//       res.status(StatusCodes.BAD_REQUEST).json({
+//         success: false,
+//         message: '用戶無效',
+//       })
+//     } else if (error.message === 'NOT FOUND') {
+//       res.status(StatusCodes.NOT_FOUND).json({
+//         success: false,
+//         message: '查無用戶',
+//       })
+//     } else {
+//       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+//         success: false,
+//         message: '伺服器錯誤',
+//       })
+//     }
+//   }
+// }
+
+export const getIdInfo = async (req, res) => {
+  res.status(StatusCodes.OK).json({
+    success: true,
+    message: '',
+    result: {
+      image: req.user.image,
+      name: req.user.name,
+      birthdate: req.user.birthdate,
+    },
+  })
 }
 
 export const edit = async (req, res) => {
   try {
     if (!validator.isMongoId(req.params.id)) throw new Error('ID')
-    req.body.icon = req.file?.path
-    // console.log(req.body.icon)
+    req.body.image = req.file?.path
+    // console.log(req.body)
     const result = await User.findByIdAndUpdate(req.params.id, req.body, {
       runValidators: true,
       new: true,

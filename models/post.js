@@ -12,7 +12,7 @@ const schema = new Schema(
     },
     author: {
       type: ObjectId,
-      ref: 'user',
+      ref: 'users',
       //   required: true,
     },
     image: {

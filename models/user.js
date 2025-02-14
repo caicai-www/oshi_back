@@ -94,7 +94,7 @@ const schema = new Schema(
       type: Date,
       default: '2000-01-01',
     },
-    icon: {
+    image: {
       type: String,
     },
     // 是否可以發文

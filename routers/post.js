@@ -6,10 +6,11 @@ import upload from '../middlewares/upload.js'
 const router = Router()
 
 router.post('/', auth.jwt, upload, post.create)
-// 未登入也可以看到的
+// 取到自己的貼文
 router.get('/', auth.jwt, post.get)
+// 取到所有貼文
 router.get('/all', post.getAll)
-// 單個商品
+// 取到單個貼文
 router.get('/:id', post.getId)
 
 export default router

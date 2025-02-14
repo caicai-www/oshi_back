@@ -66,7 +66,9 @@ export const getAll = async (req, res) => {
 export const getId = async (req, res) => {
   try {
     if (!validator.isMongoId(req.params.id)) throw new Error('ID')
-    const result = await Post.findById(req.params.id).orFail(new Error('NOT FOUND'))
+    const result = await Post.findById(req.params.id)
+      .populate('author', 'name image')
+      .orFail(new Error('NOT FOUND'))
     res.status(StatusCodes.OK).json({
       success: true,
       message: '',
@@ -77,7 +79,7 @@ export const getId = async (req, res) => {
     if (error.name === 'CastError' || error.message === 'ID') {
       res.status(StatusCodes.BAD_REQUEST).json({
         success: false,
-        message: '貼文 ID 錯誤',
+        message: '貼文 ID 錯誤 , 自動返回首頁',
       })
     } else if (error.message === 'NOT FOUND') {
       res.status(StatusCodes.NOT_FOUND).json({
