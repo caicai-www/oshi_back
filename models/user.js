@@ -3,24 +3,12 @@ import validator from 'validator'
 import bcrypt from 'bcrypt'
 import UserRole from '../enums/UserRole.js'
 
-const FavoritesSchema = new Schema({
-  user: {
+const favoriteSchema = new Schema({
+  post: {
     type: ObjectId,
-    ref: 'user', // 與用戶的關聯
-    required: true,
+    ref: 'posts', // 收藏的文章 ID
+    required: [true, '收藏文章ID必填'],
   },
-  posts: [
-    {
-      post: {
-        type: ObjectId,
-        ref: 'post', // 收藏的文章 ID
-      },
-      collectedAt: {
-        type: Date,
-        default: Date.now, // 收藏的時間
-      },
-    },
-  ],
 })
 
 const calendarSchema = new Schema({
@@ -107,8 +95,8 @@ const schema = new Schema(
       type: Boolean,
       default: true,
     },
-    postFavorites: {
-      type: [FavoritesSchema],
+    favorite: {
+      type: [favoriteSchema],
     },
     calendar: {
       type: [calendarSchema],

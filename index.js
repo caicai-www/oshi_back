@@ -5,6 +5,7 @@ import { StatusCodes } from 'http-status-codes'
 import routerUser from './routers/user.js'
 import routerPost from './routers/post.js'
 import routerPostReply from './routers/postReply.js'
+import routerCalendar from './routers/calendar.js'
 import './passport.js'
 import cors from 'cors'
 
@@ -49,6 +50,7 @@ app.use((error, req, res, next) => {
 app.use('/user', routerUser)
 app.use('/post', routerPost)
 app.use('/postReply', routerPostReply)
+app.use('/calendar', routerCalendar)
 
 app.listen(process.env.PORT || 4000, () => {
   console.log('伺服器啟動')

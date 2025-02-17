@@ -11,7 +11,7 @@ export const create = async (req, res) => {
     })
   } catch (error) {
     console.log('controllers.postReply:', error)
-    console.log(req.body)
+    // console.log(req.body)
 
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
