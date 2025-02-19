@@ -37,11 +37,39 @@ export const get = async (req, res) => {
       result,
     })
   } catch (error) {
-    console.log('controllers.post.get:', error)
+    console.log('controllers.calendar.get:', error)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: '伺服器錯誤',
     })
+  }
+}
+
+export const getId = async (req, res) => {
+  try {
+    const result = await Calendar.findById(req.params.id).orFail(new Error('NOT FOUND'))
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: '',
+      result,
+    })
+  } catch (error) {
+    console.log('controllers.calendar.getId:', error)
+    if (error.name === 'CastError' || error.message === 'ID') {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: '活動 ID 錯誤 , 自動返回首頁',
+      })
+    } else if (error.message === 'NOT FOUND') {
+      res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: '查無活動',
+      })
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: '伺服器錯誤',
+      })
+    }
   }
 }
 
@@ -84,5 +112,24 @@ export const edit = async (req, res) => {
         message: '伺服器錯誤',
       })
     }
+  }
+}
+
+export const createTopic = async (req, res) => {
+  try {
+    const result = await Calendar.create(req.body)
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: '',
+      result,
+    })
+  } catch (error) {
+    console.log('controllers. calendarTopic:', error)
+    // console.log(req.body)
+
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: '伺服器錯誤',
+    })
   }
 }

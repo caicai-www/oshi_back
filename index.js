@@ -6,6 +6,7 @@ import routerUser from './routers/user.js'
 import routerPost from './routers/post.js'
 import routerPostReply from './routers/postReply.js'
 import routerCalendar from './routers/calendar.js'
+import routerCalendarTopic from './routers/calendarTopic.js'
 import './passport.js'
 import cors from 'cors'
 
@@ -51,6 +52,7 @@ app.use('/user', routerUser)
 app.use('/post', routerPost)
 app.use('/postReply', routerPostReply)
 app.use('/calendar', routerCalendar)
+app.use('/calendarTopic', routerCalendarTopic)
 
 app.listen(process.env.PORT || 4000, () => {
   console.log('伺服器啟動')
