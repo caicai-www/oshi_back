@@ -1,5 +1,17 @@
 import { Schema, model, ObjectId } from 'mongoose'
 
+const replySchema = new Schema({
+  user: {
+    type: ObjectId,
+    ref: 'users',
+    required: true,
+  },
+  reply: {
+    type: String,
+    required: [true, '回覆內容必填'],
+  },
+})
+
 const schema = new Schema(
   {
     user: {
@@ -20,6 +32,7 @@ const schema = new Schema(
       type: String,
       required: [true, '內容必填'],
     },
+    reply: { type: [replySchema] },
   },
   {
     versionKey: false,

@@ -7,6 +7,7 @@ const router = Router()
 
 // 需要登入 所以要做jwt驗證
 router.post('/', auth.jwt, calendarTopic.create)
+router.patch('/:id', auth.jwt, calendarTopic.reply)
 router.get('/', calendarTopic.get)
 
 export default router
