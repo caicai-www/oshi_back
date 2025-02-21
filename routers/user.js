@@ -11,6 +11,7 @@ router.get('/', user.get)
 // 增加收藏文章
 router.get('/favorites', auth.jwt, user.getFavorites)
 router.patch('/favorites', auth.jwt, user.addFavorites)
+router.delete('/favorites', auth.jwt, user.removeFavorites)
 router.get('/profile', auth.jwt, user.profile)
 router.get('/info', auth.jwt, user.getIdInfo)
 router.patch('/:id', auth.jwt, upload, user.edit)
