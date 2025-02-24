@@ -26,6 +26,7 @@ export const get = async (req, res) => {
     const result = await calendarTopic
       .find({ calendar: req.query.calendar })
       .populate('user', 'name image')
+      .populate('reply.user', 'name image')
     res.status(StatusCodes.OK).json({
       success: true,
       message: '',

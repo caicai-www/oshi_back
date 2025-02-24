@@ -12,29 +12,10 @@ const favoriteSchema = new Schema({
 })
 
 const calendarSchema = new Schema({
-  title: {
-    type: String,
-    required: [true, '活動標題必填'],
-  },
-  description: {
-    type: String,
-    required: [true, '活動敘述必填'],
-  },
-  date: {
-    type: Date,
-    required: [true, '活動日期必填'],
-  },
-  location: {
-    type: String,
-  },
-  // 日期是否每年固定
-  fixed: {
-    type: Boolean,
-    default: false,
-  },
-  participants: {
+  event: {
     type: ObjectId,
-    ref: 'user',
+    ref: 'calendars',
+    required: [true, '收藏活動ID必填'],
   },
 })
 
