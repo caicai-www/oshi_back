@@ -7,6 +7,7 @@ const router = Router()
 
 router.get('/', calendar.get)
 router.get('/:id', calendar.getId)
+router.post('/', auth.jwt, upload, calendar.create)
 router.patch('/:id', auth.jwt, auth.admin, upload, calendar.edit)
 
 export default router
