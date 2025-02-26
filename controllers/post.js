@@ -32,6 +32,8 @@ export const get = async (req, res) => {
   try {
     // console.log(req.user)
     const result = await Post.find({ author: req.user._id })
+      .populate('author', 'name image')
+      .sort({ createdAt: -1 })
     res.status(StatusCodes.OK).json({
       success: true,
       message: '',
@@ -48,7 +50,7 @@ export const get = async (req, res) => {
 
 export const getAll = async (req, res) => {
   try {
-    const result = await Post.find()
+    const result = await Post.find().sort({ createdAt: -1 })
     res.status(StatusCodes.OK).json({
       success: true,
       message: '',
@@ -67,6 +69,7 @@ export const getId = async (req, res) => {
   try {
     if (!validator.isMongoId(req.params.id)) throw new Error('ID')
     const result = await Post.findById(req.params.id)
+      .sort({ createdAt: -1 })
       .populate('author', 'name image')
       .orFail(new Error('NOT FOUND'))
     res.status(StatusCodes.OK).json({
@@ -86,6 +89,62 @@ export const getId = async (req, res) => {
         success: false,
         message: '查無貼文',
       })
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: '伺服器錯誤',
+      })
+    }
+  }
+}
+
+export const getRandom = async (req, res) => {
+  try {
+    const result = await Post.aggregate([{ $sample: { size: 10 } }])
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: '',
+      result,
+    })
+  } catch (error) {
+    console.log('controllers.post.getRandom:', error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: '伺服器錯誤',
+    })
+  }
+}
+
+export const edit = async (req, res) => {
+  try {
+    if (!validator.isMongoId(req.params.id)) throw new Error('ID')
+    const result = await Post.findByIdAndUpdate(req.params.id, req.body, {
+      runValidators: true,
+      new: true,
+    }).orFail(new Error('NOT FOUND'))
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: '',
+      result,
+    })
+  } catch (error) {
+    console.log('post.edit', error)
+    if (error.name === 'CastError' || error.message === 'ID') {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: '用戶無效',
+      })
+    } else if (error.message === 'NOT FOUND') {
+      res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: '查無貼文',
+      })
+    } else if (error.name === 'ValidationError') {
+      const key = Object.keys(error.errors)[0]
+      res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: error.errors[key].message,
+      })
+    } else {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
         success: false,
         message: '伺服器錯誤',

@@ -30,6 +30,10 @@ const schema = new Schema(
         message: '顏色分類不存在',
       },
     },
+    display: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     versionKey: false,
