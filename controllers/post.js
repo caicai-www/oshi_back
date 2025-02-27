@@ -99,7 +99,7 @@ export const getId = async (req, res) => {
 
 export const getRandom = async (req, res) => {
   try {
-    const result = await Post.aggregate([{ $sample: { size: 10 } }])
+    const result = await Post.aggregate([{ $sample: { size: 20 } }])
     res.status(StatusCodes.OK).json({
       success: true,
       message: '',

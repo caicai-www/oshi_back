@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import * as calendarTopic from '../controllers/CalendarTopic.js'
+import * as calendarTopic from '../controllers/calendarTopic.js'
 
 import * as auth from '../middlewares/auth.js'
 
