@@ -50,7 +50,9 @@ export const get = async (req, res) => {
 
 export const getAll = async (req, res) => {
   try {
-    const result = await Post.find().sort({ createdAt: -1 })
+    const result = await Post.find({ display: true })
+      .sort({ createdAt: -1 })
+      .populate('author', 'name image')
     res.status(StatusCodes.OK).json({
       success: true,
       message: '',
