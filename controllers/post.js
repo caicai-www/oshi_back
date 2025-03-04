@@ -89,17 +89,13 @@ export const getId = async (req, res) => {
         success: false,
         message: '查無貼文',
       })
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: '伺服器錯誤',
-      })
     }
   }
 }
 
 export const getRandom = async (req, res) => {
   try {
-    const result = await Post.aggregate([{ $sample: { size: 20 } }])
+    const result = await Post.aggregate([{ $match: { display: true } }, { $sample: { size: 20 } }])
     res.status(StatusCodes.OK).json({
       success: true,
       message: '',

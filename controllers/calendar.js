@@ -65,10 +65,6 @@ export const getId = async (req, res) => {
         success: false,
         message: '查無活動',
       })
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: '伺服器錯誤',
-      })
     }
   }
 }
